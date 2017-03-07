@@ -6,25 +6,27 @@ from telegram.ext import MessageHandler, Filters
 from time import ctime
 from BeautifulSoup import BeautifulSoup
 import requests
-from secret import secret
 
-print secret
+secret = open('/root/.telegram-token', 'r').read().strip()
 
 updater = Updater(token=secret)
 dispatcher = updater.dispatcher
 
-def tv_2015(sender):
-    URL = ""
+def fetch_tvdata(time='now'):
+    URLbase = "http://www.tvspielfilm.de/tv-programm/rss/"
+    if time != 'now':
+        URLsuffix = 'heute2015.xml'
+        timeprefix =''
+    else:
+        URLsuffix = 'jetzt.xml'
+        timeprefix = 'seit '
+    URL = URLbase + URLsuffix
 
-def tv_now():
-    URL = "http://www.tvspielfilm.de/tv-programm/rss/jetzt.xml"
     XML = requests.get(URL).text
-
-    whitelist = ["Das Erste", "ZDF", "RTL", "SAT.1", "ProSieben", "kabel eins", "RTL II", "VOX"]
-
     soup = BeautifulSoup(XML)
 
-    out = ""
+    whitelist = ["Das Erste", "ZDF", "RTL", "SAT.1", "ProSieben", "kabel eins", "RTL II", "VOX"]
+    out = ''
 
     for item in soup.findAll('item'):
         data = item.find('title').text
@@ -33,9 +35,8 @@ def tv_now():
         sender = data[1].strip()
         name = data[2].strip()
         if sender in whitelist:
-            data = u"{} - {} (seit {})\n".format(name, sender, start)
+            data = u"{} - {} ({}{})\n".format(name, sender, timeprefix, start)
             out += data
-
     return out
 
 def start(bot, update):
@@ -52,21 +53,16 @@ def time(bot, update):
     bot.sendMessage(chat_id=update.message.chat_id, text=ctime())
 
 def tv(bot, update):
-    bot.sendMessage(chat_id=update.message.chat_id, text=tv_now())
+    bot.sendMessage(chat_id=update.message.chat_id, text=fetch_tvdata())
+
+def tv_later(bot, update):
+    bot.sendMessage(chat_id=update.message.chat_id, text=fetch_tvdata('2015'))
 
 updater.start_polling()
 
-start_handler = CommandHandler('start', start)
-dispatcher.add_handler(start_handler)
-
-echo_handler = MessageHandler(Filters.text, echo)
-dispatcher.add_handler(echo_handler)
-
-caps_handler = CommandHandler('caps', caps, pass_args=True)
-dispatcher.add_handler(caps_handler)
-
-time_handler = CommandHandler('time', time)
-dispatcher.add_handler(time_handler)
-
-tv_handler = CommandHandler('tv', tv)
-dispatcher.add_handler(tv_handler)
+dispatcher.add_handler(CommandHandler('start', start))
+dispatcher.add_handler(MessageHandler(Filters.text, echo))
+dispatcher.add_handler(CommandHandler('caps', caps, pass_args=True))
+dispatcher.add_handler(CommandHandler('time', time))
+dispatcher.add_handler(CommandHandler('tv', tv))
+dispatcher.add_handler(CommandHandler('2015', tv_later))
