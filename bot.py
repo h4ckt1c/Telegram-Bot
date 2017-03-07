@@ -58,6 +58,17 @@ def tv(bot, update):
 def tv_later(bot, update):
     bot.sendMessage(chat_id=update.message.chat_id, text=fetch_tvdata('2015'))
 
+def helpme(bot, update):
+    helptext = """Available commands:
+`/help` prints this text
+`/time` prints current time and date
+`/start` used to start this bot and prints welcome message
+`/caps {patter}` prints _{pattern}_ UPPERCASE
+`/tv` prints current tv program
+`/2015` prints tv program for today 20:15
+"""
+    bot.sendMessage(chat_id=update.message.chat_id, text=helptext, parse_mode='Markdown')
+
 updater.start_polling()
 
 dispatcher.add_handler(CommandHandler('start', start))
@@ -66,3 +77,4 @@ dispatcher.add_handler(CommandHandler('caps', caps, pass_args=True))
 dispatcher.add_handler(CommandHandler('time', time))
 dispatcher.add_handler(CommandHandler('tv', tv))
 dispatcher.add_handler(CommandHandler('2015', tv_later))
+dispatcher.add_handler(CommandHandler('help', helpme))
