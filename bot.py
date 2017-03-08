@@ -40,17 +40,7 @@ def fetch_tvdata(time='now'):
     return out
 
 def start(bot, update):
-    bot.sendMessage(chat_id=update.message.chat_id, text="I'm a bot, please talk to me!")
-
-def echo(bot, update):
-    bot.sendMessage(chat_id=update.message.chat_id, text=update.message.text)
-
-def caps(bot, update, args):
-    text_caps = ''.join(args).upper()
-    bot.sendMessage(chat_id=update.message.chat_id, text=text_caps)
-
-def time(bot, update):
-    bot.sendMessage(chat_id=update.message.chat_id, text=ctime())
+    bot.sendMessage(chat_id=update.message.chat_id, text="Hi, I'm a bot. You can ask me what's running in TV ;)")
 
 def tv(bot, update):
     bot.sendMessage(chat_id=update.message.chat_id, text=fetch_tvdata())
@@ -72,9 +62,6 @@ def helpme(bot, update):
 updater.start_polling()
 
 dispatcher.add_handler(CommandHandler('start', start))
-dispatcher.add_handler(MessageHandler(Filters.text, echo))
-dispatcher.add_handler(CommandHandler('caps', caps, pass_args=True))
-dispatcher.add_handler(CommandHandler('time', time))
 dispatcher.add_handler(CommandHandler('tv', tv))
 dispatcher.add_handler(CommandHandler('2015', tv_later))
 dispatcher.add_handler(CommandHandler('help', helpme))
