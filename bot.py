@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from telegram import ChatAction
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
 from telegram.ext import MessageHandler, Filters
@@ -12,7 +13,8 @@ secret = open('/root/.telegram-token', 'r').read().strip()
 updater = Updater(token=secret)
 dispatcher = updater.dispatcher
 
-def fetch_tvdata(time='now'):
+def fetch_tvdata(bot, update, time='now'):
+    bot.sendChatAction(chat_id=update.message.chat_id, action=ChatAction.TYPING)
     URLbase = "http://www.tvspielfilm.de/tv-programm/rss/"
     if time != 'now':
         URLsuffix = 'heute2015.xml'
@@ -43,10 +45,10 @@ def start(bot, update):
     bot.sendMessage(chat_id=update.message.chat_id, text="Hi, I'm a bot. You can ask me what's running in TV ;)")
 
 def tv(bot, update):
-    bot.sendMessage(chat_id=update.message.chat_id, text=fetch_tvdata())
+    bot.sendMessage(chat_id=update.message.chat_id, text=fetch_tvdata(bot, update))
 
 def tv_later(bot, update):
-    bot.sendMessage(chat_id=update.message.chat_id, text=fetch_tvdata('2015'))
+    bot.sendMessage(chat_id=update.message.chat_id, text=fetch_tvdata(bot, update, '2015'))
 
 def helpme(bot, update):
     helptext = """Available commands:
@@ -57,9 +59,10 @@ def helpme(bot, update):
 """
     bot.sendMessage(chat_id=update.message.chat_id, text=helptext, parse_mode='Markdown')
 
-updater.start_polling()
-
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('tv', tv))
 dispatcher.add_handler(CommandHandler('2015', tv_later))
 dispatcher.add_handler(CommandHandler('help', helpme))
+
+updater.start_polling()
+updater.idle()
