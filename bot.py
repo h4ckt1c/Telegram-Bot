@@ -51,9 +51,7 @@ def tv_later(bot, update):
 def helpme(bot, update):
     helptext = """Available commands:
 `/help` prints this text
-`/time` prints current time and date
 `/start` used to start this bot and prints welcome message
-`/caps {patter}` prints _{pattern}_ UPPERCASE
 `/tv` prints current tv program
 `/2015` prints tv program for today 20:15
 """
