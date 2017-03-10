@@ -42,7 +42,7 @@ def fetch_tvdata(bot, update, time='now'):
     return out
 
 def start(bot, update):
-    bot.sendMessage(chat_id=update.message.chat_id, text="Hi, I'm a bot. You can ask me what's running in TV ;)")
+    bot.sendMessage(chat_id=update.message.chat_id, text="Hi, I'm a bot. You can ask me what's running on TV ;)")
 
 def tv(bot, update):
     bot.sendMessage(chat_id=update.message.chat_id, text=fetch_tvdata(bot, update))

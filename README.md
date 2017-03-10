@@ -4,7 +4,7 @@ This is my first bot for telegram written in python. It's origin purpose is to f
 
 ## Usage
 
-This bot is listening in Telegram and can be found via *@h4ckt1c_tvbot*
+This bot is listening on Telegram and can be found via *@h4ckt1c_tvbot*
 
 ## Files
 
