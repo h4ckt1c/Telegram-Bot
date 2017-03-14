@@ -28,7 +28,7 @@ def fetch_tvdata(bot, update, time='now'):
     soup = BeautifulSoup(XML)
 
     whitelist = ["Das Erste", "ZDF", "RTL", "SAT.1", "ProSieben", "kabel eins", "RTL II", "VOX"]
-    out = ''
+    out = list()
 
     for item in soup.findAll('item'):
         data = item.find('title').text
@@ -38,17 +38,18 @@ def fetch_tvdata(bot, update, time='now'):
         name = data[2].strip()
         if sender in whitelist:
             data = u"{} - {} ({}{})\n".format(name, sender, timeprefix, start)
-            out += data
+            out.append(data)
+    out.sort()
     return out
 
 def start(bot, update):
     bot.sendMessage(chat_id=update.message.chat_id, text="Hi, I'm a bot. You can ask me what's running on TV ;)")
 
 def tv(bot, update):
-    bot.sendMessage(chat_id=update.message.chat_id, text=fetch_tvdata(bot, update))
+    bot.sendMessage(chat_id=update.message.chat_id, text=''.join(fetch_tvdata(bot, update)))
 
 def tv_later(bot, update):
-    bot.sendMessage(chat_id=update.message.chat_id, text=fetch_tvdata(bot, update, '2015'))
+    bot.sendMessage(chat_id=update.message.chat_id, text=''.join(fetch_tvdata(bot, update, '2015')))
 
 def helpme(bot, update):
     helptext = """Available commands:
