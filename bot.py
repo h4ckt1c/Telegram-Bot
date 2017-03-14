@@ -37,7 +37,7 @@ def fetch_tvdata(bot, update, time='now'):
         sender = data[1].strip()
         name = data[2].strip()
         if sender in whitelist:
-            data = u"{} - {} ({}{})\n".format(name, sender, timeprefix, start)
+            data = u"{} - {} ({}{})\n".format(sender, name, timeprefix, start)
             out.append(data)
     out.sort()
     return out
