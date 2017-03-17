@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from random import randint
 from telegram import ChatAction
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
@@ -57,13 +58,18 @@ def helpme(bot, update):
 `/start` used to start this bot and prints welcome message
 `/tv` prints current tv program
 `/2015` prints tv program for today 20:15
+`/dice` rolls the dice and returns random integer between 1 and 6
 """
     bot.sendMessage(chat_id=update.message.chat_id, text=helptext, parse_mode='Markdown')
+
+def dice(bot, update):
+    bot.sendMessage(chat_id=update.message.chat_id, text=str(randint(1,6)))
 
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('tv', tv))
 dispatcher.add_handler(CommandHandler('2015', tv_later))
 dispatcher.add_handler(CommandHandler('help', helpme))
+dispatcher.add_handler(CommandHandler('dice', dice))
 
 updater.start_polling()
 updater.idle()
