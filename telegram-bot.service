@@ -1,0 +1,9 @@
+[Unit]
+Description=My Telegram Bot formerly known as @h4ckt1c_tvbot
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python2.7 /usr/share/telegram-bot.py
+
+[Install]
+WantedBy=multi-user.target
